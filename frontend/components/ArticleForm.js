@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import PT from 'prop-types'
+import axios from "axios"
+import axiosWithAuth from '../axios/index'
 
 const initialFormValues = { title: '', text: '', topic: '' }
 
 export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
   // ✨ where are my props? Destructure them here
+  
+
+
 
   useEffect(() => {
     // ✨ implement
     // Every time the `currentArticle` prop changes, we should check it for truthiness:
     // if it's truthy, we should set its title, text and topic into the corresponding
-    // values of the form. If it's not, we should reset the form back to initial values.
+    // values of the form. If it's not, we should reset the form back to initial values.  // ✨ grab the articles here, on first render only
   })
 
   const onChange = evt => {
@@ -24,7 +29,12 @@ export default function ArticleForm(props) {
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
-  }
+
+  props.updateArticle(props.article_id,props.article)
+
+  };
+
+
 
   const isDisabled = () => {
     // ✨ implement

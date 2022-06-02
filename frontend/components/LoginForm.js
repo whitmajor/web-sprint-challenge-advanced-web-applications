@@ -1,30 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState, } from 'react'
 import PT from 'prop-types'
 import axios from "axios"
+import { useNavigate } from 'react-router-dom'
+
+
 
 const initialFormValues = {
   username: '',
   password: '',
 }
 export default function LoginForm(props) {
+  
   const [values, setValues] = useState(initialFormValues)
+ const {login, setMessage, setSpinnerOn} = props
+  const navigate = useNavigate()
+
+ 
+
   // ✨ where are my props? Destructure them here
 //review
   const onChange = evt => {
     const { id, value } = evt.target
     setValues({ ...values, [id]: value })
+   
   }
 
   const onSubmit = evt => {
     evt.preventDefault()
     // ✨ implement
-    //review
+    login(values);
+    setMessage("")
+    setSpinnerOn(true);
+    
     axios.post("http://localhost:9000/api/login",values)
     .then(res=>{
-      console.log(res)
-      localStorage.setItem("token", res.data.payload)
+      localStorage.setItem("token", res.data.token)
+      navigate("/articles")
     })
-    .catch(err=>console.log({err}))
+    .catch(err=>{
+      console.log(err)
+    })
   }
 
   const isDisabled = () => {
@@ -32,6 +47,11 @@ export default function LoginForm(props) {
     // Trimmed username must be >= 3, and
     // trimmed password must be >= 8 for
     // the button to become enabled
+    if(values.username.length >= 3 && values.password.length >= 0){
+      return false
+    }else {
+      return true 
+    }
   }
 
   return (
@@ -53,7 +73,7 @@ export default function LoginForm(props) {
         placeholder="Enter password"
         id="password"
       />
-      <button disabled={isDisabled()} id="submitCredentials">Submit credentials</button>
+      <button type ="submit" disabled={isDisabled()} id="submitCredentials">Submit credentials</button>
     </form>
   )
 }
